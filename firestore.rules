@@ -1,0 +1,30 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Kto może korzystać z planu: każdy, kto otworzył stronę. Przeglądarka loguje się anonimowo,
+    // więc request.auth jest ustawione, ale nie jest przypisane do żadnego konta.
+    function allowed() {
+      return request.auth != null;
+    }
+
+    // Kształt profilu: imię i nazwisko, opcjonalny obrazek, opcjonalne miejsce.
+    function validProfile() {
+      let d = request.resource.data;
+      return d.keys().hasOnly(['name', 'avatar', 'seat', 'seatAt', 'updatedAt'])
+        && d.name is string && d.name.size() > 0 && d.name.size() <= 60
+        && (!('avatar' in d) || (d.avatar is map
+              && d.avatar.t in ['e', 'i']
+              && d.avatar.v is string && d.avatar.v.size() < 90000))
+        && (!('seat' in d) || (d.seat is string && d.seat.size() <= 8));
+    }
+
+    // Każdy widzi wszystkie profile, ale zapisać i usunąć może tylko własny.
+    match /profiles/{uid} {
+      allow read: if allowed();
+      allow create, update: if allowed() && request.auth.uid == uid && validProfile();
+      allow delete: if allowed() && request.auth.uid == uid;
+    }
+  }
+}

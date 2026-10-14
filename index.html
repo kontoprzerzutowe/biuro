@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Kto gdzie siedzi</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230071e3'/%3E%3Ccircle cx='11' cy='12' r='4' fill='%23fff'/%3E%3Ccircle cx='21' cy='12' r='4' fill='%23fff' opacity='.55'/%3E%3Ccircle cx='11' cy='22' r='4' fill='%23fff' opacity='.55'/%3E%3Ccircle cx='21' cy='22' r='4' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1>Kto gdzie siedzi</h1>
+      <div class="sub"><span id="summary">Wczytuję…</span><span class="meter" aria-hidden="true"><i id="meterFill"></i></span></div>
+    </div>
+    <div class="tools">
+      <div class="search">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5"/><path d="M13 13l4 4"/></svg>
+        <input id="q" type="search" placeholder="Szukaj osoby" aria-label="Szukaj osoby" autocomplete="off" spellcheck="false">
+      </div>
+      <button type="button" class="me new" id="meBtn" hidden><span class="me-av" id="meAv"></span><span class="me-l" id="meLabel">Utwórz profil</span></button>
+    </div>
+  </header>
+
+  <section class="card gate" id="gate" hidden>
+    <div class="gate-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+    <h2 id="gateTitle"></h2>
+    <p id="gateText"></p>
+    <button type="button" class="btn primary" id="gateBtn">Spróbuj ponownie</button>
+  </section>
+
+  <main class="layout" id="layout" hidden>
+    <section class="card plan" aria-label="Plan biura">
+      <div class="stage" id="stage">
+        <svg id="plan" viewBox="320 95 1240 890" role="group" aria-label="Plan biura z miejscami przy biurkach"></svg>
+      </div>
+      <div class="hint">
+        <p id="hintText"></p>
+        <div class="legend">
+          <span class="lg"><i class="free"></i>Wolne</span>
+          <span class="lg"><i class="taken"></i>Zajęte</span>
+          <span class="lg"><i class="mine"></i>Twoje miejsce</span>
+          <span class="lg"><i class="conf"></i>Sala konferencyjna</span>
+        </div>
+      </div>
+    </section>
+
+    <aside class="card people" aria-label="Lista osób">
+      <div class="people-head"><h2>Osoby</h2><span class="badge" id="count">0</span></div>
+      <ul class="list" id="list"></ul>
+      <p class="list-empty" id="listEmpty"></p>
+    </aside>
+  </main>
+</div>
+
+<div class="tip" id="tip" role="tooltip"><b id="tipName"></b><span id="tipSub"></span></div>
+<div class="scrim" id="scrim"></div>
+
+<div class="pop" id="card" role="dialog" aria-label="Szczegóły miejsca">
+  <div class="who">
+    <span class="pd big" id="cardAv"></span>
+    <div><div class="who-name" id="cardName"></div><div class="who-sub" id="cardSub"></div></div>
+  </div>
+  <div class="actions" id="cardActions">
+    <button type="button" class="btn danger" id="cardFree">Zwolnij miejsce</button>
+    <span class="sp"></span>
+    <button type="button" class="btn" id="cardEdit">Mój profil</button>
+  </div>
+</div>
+
+<form class="dlg" id="dlg" role="dialog" aria-modal="true" aria-labelledby="dlgTitle" autocomplete="off">
+  <div class="dlg-hero"><div class="big-av" id="dlgAvatar"></div></div>
+  <h3 id="dlgTitle">Twój profil</h3>
+  <p class="dlg-sub" id="dlgSub"></p>
+  <input id="nameInput" type="text" placeholder="Imię i nazwisko" aria-label="Imię i nazwisko" maxlength="60" autocomplete="off" spellcheck="false">
+  <div class="pop-label">Obrazek</div>
+  <div class="av-grid" id="avGrid" role="group" aria-label="Wybierz obrazek"></div>
+  <div class="photo-row">
+    <span id="photoThumb"></span>
+    <button type="button" class="btn" id="photoBtn">Wgraj własne zdjęcie</button>
+    <input type="file" id="photoInput" accept="image/*" hidden>
+  </div>
+  <p class="photo-hint">Zdjęcie jest zmniejszane, zapisuje się w Twoim profilu i widzą je wszyscy w biurze.</p>
+  <div class="actions">
+    <button type="button" class="btn danger" id="dlgDelete" hidden>Usuń profil</button>
+    <span class="sp"></span>
+    <button type="button" class="btn" id="dlgCancel">Anuluj</button>
+    <button type="submit" class="btn primary" id="dlgSave">Zapisz</button>
+  </div>
+  <p class="signout">Profil jest zapamiętany w tej przeglądarce. Na innym urządzeniu zrobisz nowy.</p>
+</form>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
